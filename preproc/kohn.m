@@ -4,15 +4,13 @@
 
 % user variables
 saving = 1;
-overwrite = 1;
-monkey = 3;
+overwrite = 0;
+monkey = 1;
 
-onset = 60; % ms
-offset = 1260; % ms
-num_bins = 12;
+onset = 500; % ms
+offset = 1000; % ms
 
-save_name = sprintf('monkey%i_all-stims_%04i-%04ims', ...
-    monkey, onset, offset);
+save_name = sprintf('v1-%i_%04i-%04ims', monkey, onset, offset);
 
 %% ************************ load raw data *********************************
 
@@ -29,32 +27,24 @@ fprintf('done\n')
 % change ms -> s
 onset = onset / 1000; 
 offset = offset / 1000;
-bin_size = (offset - onset) / num_bins;
 
 fprintf('Processing binned spikes...')
 
 [num_neurons, num_stims, num_reps] = size(data.EVENTS);
 num_trials = num_stims * num_reps;
 
-binned_spikes = NaN(num_trials * num_bins, num_neurons);
+binned_spikes = NaN(num_trials, num_neurons);
 trial_ids = cell(num_reps, num_stims);
-expt_struct = struct('bin_size', bin_size);
+expt_struct = struct([]);
 indx = 0;
 for nr = 1:num_reps
     for ns = 1:num_stims
-        indxs = [];
-        for bin = 1:num_bins
-            indx = indx + 1;
-            indxs = [indxs, indx];
-            bin_start = onset + (bin - 1) * bin_size;
-            bin_end = onset + bin * bin_size;
-            for nn = 1:num_neurons  
-                spikes = data.EVENTS{nn, ns, nr};
-                binned_spikes(indx, nn) = ...
-                    sum(spikes > bin_start & spikes <= bin_end);
-            end
+        indx = indx + 1;
+        for nn = 1:num_neurons  
+            spikes = data.EVENTS{nn, ns, nr};
+            binned_spikes(indx, nn) = sum(spikes > onset & spikes < offset);
         end
-        trial_ids{nr, ns} = indxs;
+        trial_ids{nr, ns} = indx;
     end
 end
 
