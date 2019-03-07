@@ -24,7 +24,7 @@ function fitGams(net_io, net_arch, net_fit, data_struct)
 %           'fr' | 'spikes' | '2p'
 %       num_folds (scalar): number of folds to divide data into
 %       num_xvs (scalar): number of folds to actually fit and evaluate
-%       rng_seed (scalar): seed to determine tr/xv indices
+%       rng_seed (scalar):- `util/getTrialMeanData.m`:  seed to determine tr/xv indices
 %       eval_only (bool): don't fit model; load/eval/resave
 %       pos_stim_mod (bool): only fit neurons with positive stim model r2s
 
@@ -111,28 +111,8 @@ end
 % get processed input data
 [xmat, input_params] = buildGamXmats( ...
     dataset_name, net_arch, data, expt_struct, trial_ids, trial_avg);
-if trial_avg && dataset_name(1) == 'K'
-    [data, trial_ids] = getTrialMeanData(data, expt_struct, trial_ids);
-    %results_dir = sprintf('%s_avg', results_dir);
-    change_xv_dir = 0;
-elseif trial_avg && dataset_name(1) == 's'
-    %results_dir = sprintf('%s_avg', results_dir);
-    num_reps = size(trial_ids, 1);
-    num_folds = num_reps;
-    data_struct.num_folds = num_reps;
-    num_xvs = num_reps;
-    data_struct.num_xvs = num_reps;
-    change_xv_dir = 1;
-else
-    change_xv_dir = 0;
-end
+xv_dir = sprintf('%02d_fold', num_folds);
 
-% calculate tr/xv indices for new trial ids
-if change_xv_dir
-    xv_dir = '10_fold';
-else
-    xv_dir = sprintf('%02d_fold', num_folds);
-end
 [indx_reps, ~] = getIndices(num_folds, rng_seed, trial_ids);
 
 % get noise distribution from data_type

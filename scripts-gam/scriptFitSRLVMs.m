@@ -1,9 +1,9 @@
-function scriptFitGams4(dataset_nums, model)
+function scriptFitSRLVMs(dataset_nums, model)
 
 %% ************************* setup ****************************************
 
 % load/save variables
-io_struct.saving = 1;           % 0 for none, 1 to save, 2 for extra info
+io_struct.saving = 1;           % 0 for none, 1 to save
 io_struct.overwrite = 0;        % perform fits even if they already exist
 io_struct.model_dir = '';       % sub-dir inside xv_dir for results
 io_struct.sub_dir = '';         % sub-dir inside model_dir for results
@@ -20,8 +20,8 @@ data_struct.normalize = 1;
 data_struct.fit_type = 'full';  % 'full' | 'loo'
 data_struct.trial_avg = 1;      % 1 model activity avg'd over full trial
 data_struct.data_type = 'fr';   % 'fr' | 'spikes' | '2p'
-data_struct.num_folds = 10;     % number of folds to divide data into
-data_struct.num_xvs = 10;       % number of folds to actually evaluate
+data_struct.num_folds = 5;      % number of folds to divide data into
+data_struct.num_xvs = 5;        % number of folds to actually evaluate
 data_struct.rng_seed = 0;       % seed for training/xv indices
 data_struct.eval_only = 0;      % don't fit model; load/eval/resave
 data_struct.pos_stim_mod = 0;   % only fit neurons with positive stim model
@@ -40,17 +40,9 @@ model_struct.optim_params = struct( ...
 model_struct.mult_nonlin = 'oneplus'; % 'exp' | 'oneplus'
 model_struct.noise_dist = NaN;
 model_struct.spiking_nl = NaN;
-model_struct.fit_stim = 0;      % 1 to fit stim simult. w/ add models
+model_struct.fit_stim = 0;        % 1 to fit stim simult. w/ add models
 model_struct.init_loo_w_full = 1; % 1 to init loo models with full models
                                   % assumes in same dir as stim models
-                                  
-% model_template types:
-% ind
-% add
-% [add/mult/aff]_pop
-% [add/mult/aff]_popavg
-% [add/mult/aff]_pup
-% [add/mult/aff]_run
 
 %% ************************ model templates *******************************
 
@@ -146,57 +138,6 @@ elseif model == 20
     model_struct.num_bfs.add = 8;
     model_struct.num_int_bfs.add = 10;
     io_struct.custom_ext = '10-10';
-    
-elseif model == 21
-    model_template.add = 1;
-    model_struct.num_bfs.add = 1;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-01';
-elseif model == 22
-    model_template.add = 1;
-    model_struct.num_bfs.add = 2;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-02';
-elseif model == 23
-    model_template.add = 1;
-    model_struct.num_bfs.add = 3;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-03';
-elseif model == 24
-    model_template.add = 1;
-    model_struct.num_bfs.add = 4;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-04';
-elseif model == 25
-    model_template.add = 1;
-    model_struct.num_bfs.add = 5;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-05';
-elseif model == 26
-    model_template.add = 1;
-    model_struct.num_bfs.add = 6;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-06';
-elseif model == 27
-    model_template.add = 1;
-    model_struct.num_bfs.add = 7;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-07';
-elseif model == 28
-    model_template.add = 1;
-    model_struct.num_bfs.add = 8;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-08'; 
-elseif model == 29
-    model_template.add = 1;
-    model_struct.num_bfs.add = 9;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-09';
-elseif model == 30
-    model_template.add = 1;
-    model_struct.num_bfs.add = 10;
-    model_struct.num_int_bfs.add = 15;
-    io_struct.custom_ext = '15-10';
     
 end
 

@@ -57,37 +57,6 @@ for sub = 1:length(net_arch)
             otherwise
                 error('Invalid input type "%s"', net_arch(sub).input_type)                
         end
-        
-        % process input
-        if trial_avg && dataset_name(1) == 'K' && ...
-                ~strcmp(net_arch(sub).input_type, 'stim')
-            
-            % replace input values with mean over stim/blank indices
-            input = getTrialMeanBonin(input, expt_struct, 'mean');
-
-            % just use mean value from first bin of each stim
-            [num_trials, num_stims] = size(expt_struct.stims);
-            input_mean = zeros(2 * num_stims * num_trials, size(input, 2));
-            for i = 1:num_trials
-                for j = 1:num_stims
-                    % blanks
-                    input_mean((i-1) * 2 * num_stims + 2 * j - 1, :) = ...
-                        input(expt_struct.blanks{i,j}(1), :);
-                    % stims
-                    input_mean((i-1) * 2 * num_stims + 2 * j - 0, :) = ...
-                        input(expt_struct.stims{i,j}(1), :);
-                end
-            end
-            if ~any(strcmp(net_arch(sub).input_type, {'pop', 'popavg'}))
-                % pop/popavg already normalized
-                input_mean = ...
-                    bsxfun(@minus, input_mean, mean(input_mean, 1));
-                input_mean = ...
-                    bsxfun(@minus, input_mean, std(input_mean, [], 1));
-            end
-            input = input_mean;
-            clear input_mean
-        end
                 
         input_params(curr_targ) = GAM.create_input_params( ...
             [net_arch(sub).input_lags, size(input, 2), 1], ... 

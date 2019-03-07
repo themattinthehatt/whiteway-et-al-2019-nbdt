@@ -3,13 +3,13 @@ function [indx_reps, trials_in_fold] = getIndices( ...
 % splits data into folds; each fold includes a trial from each stimulus
 % orientation
 %
-% INPUTS
+% INPUT:
 %   num_folds		number of folds for xv
 %   rng_seed		seed for random number generator to keep track of
 %						training/xv indices
 %	epoch_frames	num_trials x num_stims cell array of stim/blank indices
 %
-% OUTPUTS
+% OUTPUT:
 %   indx_reps		[] x num_folds cell array of indices for use in 
 %						training/xv
 
