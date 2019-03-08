@@ -1,22 +1,13 @@
-%% create data
+%% simulate data and fit with (s)rlvms
+
+% user variables
 num_neurons = 50;
-rng_seed = 0;
-data_struct = createSimData2(num_neurons, rng_seed);
-
-% figure; 
-% subplot(211)
-% plot(data_struct.gain_sig);
-% subplot(212)
-% plot(data_struct.stim_sigs{1})
-
-data = data_struct.data_fr;
-xmat{1} = data;
-input_params(1) = GAM.create_input_params([1, num_neurons, 1]);
-
-num_folds = 10;
+num_folds = 5;
 num_xvs = 5;
 
-indx_reps = set_indx_reps(size(data, 1), num_folds);
+% model parameters
+bf_vals = [1, 2, 3, 4, 5, 6];
+int_bf_vals = [0, 10];
 
 %% define model
 
@@ -47,15 +38,13 @@ model_struct.optim_params = struct( ...
 model_struct.mult_nonlin = 'oneplus'; % 'exp' | 'oneplus'
 model_struct.noise_dist = NaN;
 model_struct.spiking_nl = NaN;
-model_struct.fit_stim = 0;      % 1 to fit stim simult. w/ add models
+model_struct.fit_stim = 0;        % 1 to fit stim simult. w/ add models
 model_struct.init_loo_w_full = 1; % 1 to init loo models with full models
                                   % assumes in same dir as stim models
          
 %% fit models
 
 model_template.add = 1;
-bf_vals = [1, 2, 3, 4, 5, 6];
-int_bf_vals = [0, 10];
 
 num_bf_vals = length(bf_vals);
 num_int_bf_vals = length(int_bf_vals);
@@ -70,50 +59,58 @@ loop_counter = 0;
 loop_start = 1;
 loop_end = num_xvs * num_bf_vals * num_int_bf_vals;
     
-for ibf = 1:num_int_bf_vals
-    for bf = 1:num_bf_vals
+% loop through fits
+for nxv = 1:num_xvs
 
-        model_struct.num_bfs.add = bf_vals(bf);
-        model_struct.num_int_bfs.add = int_bf_vals(ibf);
-
-        model_fit_struct = buildModelFitStruct( ...
-            model_template, model_struct, io_struct);
-
-        % pull model data from model_fit_struct
-        net_io = model_fit_struct.net_io;
-        net_arch = model_fit_struct.net_arch;
-        net_fit = model_fit_struct.net_fit;
-        net_fit.noise_dist = 'gauss';
-        net_fit.spiking_nl = 'lin';
-        net_fit.reg_vals = [1e-5];
-        for i = 1:length(net_arch)
-           for j = 1:length(net_arch(i).layers)
-               if net_arch(i).layers(j) == -1
-                   net_arch(i).layers(j) = num_neurons;
-               end
-           end
-        end
-        % lvm -> rlvm
-        if model_struct.num_int_bfs.add == 0
-            net_arch.act_funcs{1} = 'relu';
-        end
-        
-        % loop through fits
-        for nxv = 1:num_xvs
-
-            % determine training/xv indices
-            indx_tr = [indx_reps{setdiff(1:num_folds, nxv)}];
-            indx_tr = sort(indx_tr(:));
-            indx_xv = sort(indx_reps{nxv});
+    % build data
+    data_struct = createSimData(num_neurons, nxv);
+    data = data_struct.data_fr;
+    xmat{1} = data;
+    input_params(1) = GAM.create_input_params([1, num_neurons, 1]);
+    indx_reps = getIndxReps(size(data, 1), num_folds);
+    
+    % determine training/xv indices
+    indx_tr = [indx_reps{setdiff(1:num_folds, nxv)}];
+    indx_tr = sort(indx_tr(:));
+    indx_xv = sort(indx_reps{nxv});
+    
+    for ibf = 1:num_int_bf_vals
+        for bf = 1:num_bf_vals
 
             % print updates
             loop_counter = loop_counter + 1;
-            msg = sprintf('Fitting model %02g of %02g', loop_counter, loop_end);
+            msg = sprintf( ...
+                'Fitting model %02g of %02g', loop_counter, loop_end);
             if loop_counter ~= loop_start
                 fprintf([repmat('\b', 1, length(msg)), msg])
             else
                 fprintf(msg)
             end
+            
+            model_struct.num_bfs.add = bf_vals(bf);
+            model_struct.num_int_bfs.add = int_bf_vals(ibf);
+
+            model_fit_struct = buildModelFitStruct( ...
+                model_template, model_struct, io_struct);
+
+            % pull model data from model_fit_struct
+            net_io = model_fit_struct.net_io;
+            net_arch = model_fit_struct.net_arch;
+            net_fit = model_fit_struct.net_fit;
+            net_fit.noise_dist = 'gauss';
+            net_fit.spiking_nl = 'lin';
+            net_fit.reg_vals = [1e-5];
+            for i = 1:length(net_arch)
+               for j = 1:length(net_arch(i).layers)
+                   if net_arch(i).layers(j) == -1
+                       net_arch(i).layers(j) = num_neurons;
+                   end
+               end
+            end
+            % lvm -> rlvm
+            if model_struct.num_int_bfs.add == 0
+                net_arch.act_funcs{1} = 'relu';
+            end 
 
             % fit model
             [net, r2s, fit_struct] = fitGamSeries( ...
@@ -146,8 +143,6 @@ end
 figure;
 mns = mean(r2s, 3);
 stds = std(r2s, [], 3) / sqrt(num_xvs);
-% mns = r2s;
-% stds = zeros(size(r2s));
 for ibf = 1:num_int_bf_vals
     x = bf_vals(:);
     y = mns(ibf, :);

@@ -1,6 +1,8 @@
 % user variables
-model_dir = '';
+
 datasets = 3;
+
+model_dir = '';
 num_folds = 5;
 
 xv_dir = sprintf('%02g_fold', num_folds);

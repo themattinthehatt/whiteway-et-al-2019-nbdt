@@ -1,4 +1,4 @@
-function indx_reps = set_indx_reps(num_pts, num_folds)
+function indx_reps = getIndxReps(num_pts, num_folds)
 
 indx_reps = cell(num_folds, 1);
 

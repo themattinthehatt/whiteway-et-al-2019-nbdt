@@ -1,6 +1,6 @@
 % user variables
 
-datasets = [1]; % v1
+datasets = [1, 2, 3]; % v1
 % datasets = [11, 12, 13]; % pfc
 
 model_dir = '';
@@ -16,6 +16,7 @@ model_strs = { ...
 num_models = length(model_strs);
 sub_dir = '';
 custom_ext = '';
+
 r2s = cell(num_datasets, num_models);
 
 %% iterate through datasets
@@ -57,6 +58,8 @@ r = [0.8500    0.3250    0.0980]; % 217 83 25
 y = [0.9290    0.6940    0.1250]; % 237 177 32
 p = [0.4940    0.1840    0.5560]; % 126 47 142
 g = [0.4660    0.6740    0.1880]; % 119 172 48
+
+figure;
 
 % tidy up model strings
 assign_line_properties;
