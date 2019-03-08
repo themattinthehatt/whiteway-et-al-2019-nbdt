@@ -1,4 +1,4 @@
-## Characterizing the nonlinear structure of shared variability in cortical neuron populations using latent variable models
+# Characterizing the nonlinear structure of shared variability in cortical neuron populations using latent variable models
 
 This repository contains code for replicating the analyses carried out by Whiteway et al. in the paper _Characterizing the nonlinear structure of shared variability in cortical neuron populations using latent variable models_, available [here](https://www.biorxiv.org/content/biorxiv/early/2018/09/04/407858.full.pdf). Instructions are located below.
 
@@ -27,7 +27,8 @@ We're going to put data from both datasets into the same data structure. There w
 
 **Data**. Each of the datasets in this analysis is identified by a unique integer, which is defined in `util/getDatasetStrings.m`.  This makes the entire analysis pipeline easily applicable to new datasets, as long as they are in the format specified above and are entered into this function.
 
-**Models**. All of the code from this point on relies on the [GAM toolbox](https://github.com/themattinthehatt/gam), which should run out of the box. You will also need to download or pull this project directory onto your local machine, and add it to your Matlab path.
+**Models**. All of the code from this point on relies on the [GAM toolbox](https://github.com/themattinthehatt/gam), which should run out of the box. You will also need to download or pull this project directory onto your local machine, and add it to your Matlab path. Additionally, the fitting of the stimulus models uses the [NIM toolbox](https://github.com/dbutts/NIMclass), which you will need to download or pull onto your local machine, and add to your Matlab path. 
+In the paper we used 10-fold cross-validation; to make model fitting faster for anyone interested in using this code the default has been set to 5-fold, which can be changed in the boiler plate code at the top of the fitting scripts in the `data_struct` struct (`num_folds` corresponds to number of cross-validation folds to break data into, `num_xvs` corresponds to actual number of folds to fit on).
 
 ## Step 4: Fit (S)RLVM models
 
@@ -54,9 +55,38 @@ $ sudo apt install screen
 ```
 Next, you'll have to put a `startup.m` script into your Matlab home directory. This script will be called each time Matlab is started, and we can use this to point Matlab to the necessary directories programmatically. There is an example script in `utils/startup.m`; move this into your Matlab home directory as `/home/user/Documents/MATLAB/startup.m`.
 
-Now you can use the function `scripts-gam/run_srlvms.sh`. This script will loop through multiple datasets and models. For each dataset/model, the script will launch an instance of Matlab in a detached `screen` session, call `startup.m` to find the GAM toolbox and the analysis scripts, then fit the model and exit when finished. The variable `max_screens` defines how many models will be fit in parallel. Once a model is finished fitting another will be launched until all models have been fit. An easy way to see which screens are currently on is to use the `screen -ls` command.
+Now you can use the function `scripts-gam/run_srlvms.sh`. This script will loop through multiple datasets and models. For each dataset/model, the script will launch an instance of Matlab in a detached `screen` session, call `startup.m` to find the GAM toolbox and the analysis scripts, then fit the model and exit when finished. The variable `max_screens` defines how many models will be fit in parallel. Once a model is finished fitting another will be launched until all models have been fit. An easy way to see which screens are currently on is to use the `screen -ls` command. To run the script from the project home directory
+```
+$ bash scripts-gam/run_srlvms.sh
+```
 
+## Step 5: Fit tuning curves
 
+The GAM models that we'll fit next use a stimulus model. We'll fit the stimulus models first, which can be used to initialize the GAMs, or, alternately, can be used as the fixed stimulus response that is not learned along with the parameters associated with the latent variables. The procedure is the same as fitting the (S)RLVMs, but using the `scripts-stim-models/fitStimModels.m` function. Analogously, a bash script `scripts-stim-models/run_stimulus.sh` is provided to speed up fitting time using screens:
+
+```
+$ bash scripts-stim-models/run_stimulus.sh
+```
+
+## Step 6: Fit Additive/Multiplicative/Affine models
+
+Next we'll fit models that have previously been introduced in the literature. The relevant high-level functions are `scripts-gam/scriptFitPreviousModels.m` and `scripts-gam/run_previous_models.sh`:
+
+```
+$ bash scripts-gam/run_previous_models.sh
+```
+
+Note that these models can take quite a while to fit.
+
+## Step 7: Fit (extended) GAM models
+
+Next we'll fit the GAM models (e.g. Fig. 5B in the paper). The relevant high-level functions are `scripts-gam/scriptFitGAMs.m` and `scripts-gam/run_gams.sh`:
+
+```
+$ bash scripts-gam/run_gams.sh
+```
+
+Note that these models can take quite a while to fit.
 
 
 
