@@ -15,19 +15,21 @@
 # finished
 # screen -S $screen_id -X quit
 
-max_screens=4
-sleep_time=1s
+max_screens=5
+sleep_time=5s
 
-datasets1=`seq 201 10 211`
+datasets1=`seq 1 1 3`
+datasets2=`seq 11 1 13`
 
-model_nums1=(1 2 3 4 5 11 12 13 14 15)
-model_nums2=(111 112 113 114 115 121 122 123 124 125 131 132 133 134 135)
-model_nums3=(141 142 143 144 145 151 152 153 154 155)
+# additive models
+model_nums1=(1 2 3 4)
 
-#model_nums1=(1 2 3 11 12 13)
-#model_nums2=(111 112 113 121 122 123 131 132 133)
+# multiplicative models
+model_nums2=(11 12 13 14)
 
-# fit gams
+# affine models
+model_nums3=(111 112 113 114 121 122 123 124 131 132 133 134 141 142 143 144)
+
 for dataset in $datasets1 $datasets2; do
     for model_num in ${model_nums1[@]}; do
         # get anything in screen list that is not a directory
@@ -40,11 +42,10 @@ for dataset in $datasets1 $datasets2; do
         # execute next run
         screen_id="screen_"$dataset"-"$model_num
         screen -d -m -S $screen_id matlab -nojvm -r \
-            "add_dir('gam'); scriptFitGams3($dataset,$model_num); exit"
+            "scriptFitGAMs($dataset,$model_num); exit"
     done
 done
 
-# fit decoders
 for dataset in $datasets1 $datasets2; do
     for model_num in ${model_nums2[@]}; do
         # get anything in screen list that is not a directory
@@ -57,11 +58,10 @@ for dataset in $datasets1 $datasets2; do
         # execute next run
         screen_id="screen_"$dataset"-"$model_num
         screen -d -m -S $screen_id matlab -nojvm -r \
-            "add_dir('gam'); scriptFitGams3($dataset,$model_num); exit"
+            "scriptFitGAMs($dataset,$model_num); exit"
     done
 done
 
-# evaluate decoders on gams
 for dataset in $datasets1 $datasets2; do
     for model_num in ${model_nums3[@]}; do
         # get anything in screen list that is not a directory
@@ -74,15 +74,8 @@ for dataset in $datasets1 $datasets2; do
         # execute next run
         screen_id="screen_"$dataset"-"$model_num
         screen -d -m -S $screen_id matlab -nojvm -r \
-            "add_dir('gam'); scriptFitGams3($dataset,$model_num); exit"
+            "scriptFitGAMs($dataset,$model_num); exit"
     done
 done
-
-# test
-#for dataset in $datasets1 $datasets2; do
-#    for model_num in ${model_nums1[@]}; do
-#        echo $dataset-$model_num
-#    done
-#done
 
 exit

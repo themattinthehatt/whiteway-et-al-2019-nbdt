@@ -1,7 +1,7 @@
 function [fits_stim, meas_stim] = fitStimModels(io_struct, data_struct)
 % fit stimulus models
 % 
-% INPUTS:
+% INPUT:
 %   io_struct (struct): saving info
 %       saving (bool): 1 to save model output
 %       overwrite (bool): 1 to overwrite models if they already exist

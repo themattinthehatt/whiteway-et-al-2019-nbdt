@@ -1,4 +1,4 @@
-function scriptFitGams(dataset_nums, model)
+function scriptFitGAMs(dataset_nums, model)
 
 %% ************************* setup ****************************************
 
@@ -20,12 +20,12 @@ data_struct.normalize = 1;
 data_struct.fit_type = 'full';  % 'full' | 'loo'
 data_struct.trial_avg = 1;      % 1 model activity avg'd over full trial
 data_struct.data_type = 'fr';   % 'fr' | 'spikes' | '2p'
-data_struct.num_folds = 10;     % number of folds to divide data into
-data_struct.num_xvs = 10;       % number of folds to actually evaluate
+data_struct.num_folds = 5;      % number of folds to divide data into
+data_struct.num_xvs = 5;        % number of folds to actually evaluate
 data_struct.rng_seed = 0;       % seed for training/xv indices
 data_struct.eval_only = 0;      % don't fit model; load/eval/resave
 data_struct.pos_stim_mod = 0;   % only fit neurons with positive stim model
-
+                                  
 % model parameters
 model_struct.fit_type = data_struct.fit_type;
 model_struct.num_bfs = struct('add', 1, 'mult', 1);
@@ -44,14 +44,6 @@ model_struct.fit_stim = 0;      % 1 to fit stim simult. w/ add models
 model_struct.init_loo_w_full = 1; % 1 to init loo models with full models
                                   % assumes in same dir as stim models
 
-% model_template types:
-% ind
-% add
-% [add/mult/aff]_pop
-% [add/mult/aff]_popavg
-% [add/mult/aff]_pup
-% [add/mult/aff]_run
-
 %% ************************ model templates *******************************
 
 if model == 0
@@ -63,8 +55,7 @@ elseif model < 11
     model_struct.num_bfs.mult = 0;
     model_struct.num_int_bfs.add = 0;
     model_struct.num_int_bfs.mult = 0;
-    io_struct.custom_ext = sprintf('%02i-%02i%s', ...
-        model_struct.num_int_bfs.add, model, io_struct.custom_ext);
+    io_struct.custom_ext = sprintf('%02i%s', model, io_struct.custom_ext);
 elseif model < 21
     % multiplicative models
     model_template.mult_pop = 1;
@@ -72,14 +63,13 @@ elseif model < 21
     model_struct.num_bfs.mult = model - 10;
     model_struct.num_int_bfs.add = 0;
     model_struct.num_int_bfs.mult = 0;
-    io_struct.custom_ext = sprintf('%02i-%02i%s', ...
-        model_struct.num_int_bfs.mult, model - 10, io_struct.custom_ext);
+    io_struct.custom_ext = sprintf('%02i%s', model - 10, io_struct.custom_ext);
 elseif model > 100
-    % affine models                
+    % affine models
     model_template.aff_pop = 1;
    
-    num_add = floor((model - 100) / 10);
-    num_mult = model - 100 - num_add * 10;
+    num_add = floor((model - 100) / 10);    % tens digit = # add lvs
+    num_mult = model - 100 - num_add * 10;  % ones digit = # mult lvs
 
     model_struct.num_bfs.add = num_add;
     model_struct.num_bfs.mult = num_mult;
@@ -89,72 +79,10 @@ elseif model > 100
         num_add, num_mult, io_struct.custom_ext);
 end
 
-% fit model types
-% if model == 0
-%     model_template.ind = 1;
-% elseif model == 1
-%     model_template.goris_popavg = 1;
-%     io_struct.custom_ext = '';
-%     model_struct.mult_nonlin = 'exp';
-% elseif model == 2
-%     model_template.goris_popavg = 1;
-%     io_struct.custom_ext = 'oneplus';
-%     model_struct.mult_nonlin = 'oneplus';
-% elseif model == 3
-%     model_template.goris_pop = 1;
-%     io_struct.custom_ext = '';
-%     model_struct.mult_nonlin = 'exp';
-% elseif model == 4
-%     model_template.goris_pop = 1;
-%     io_struct.custom_ext = ''; %'oneplus';
-%     model_struct.mult_nonlin = 'oneplus';
-%     
-% elseif model == 5
-%     model_template.lin_popavg = 1;
-%     io_struct.custom_ext = '';
-%     model_struct.mult_nonlin = 'exp';
-% elseif model == 6
-%     model_template.lin_popavg = 1;
-%     io_struct.custom_ext = 'oneplus';
-%     model_struct.mult_nonlin = 'oneplus';
-% elseif model == 7
-%     model_template.lin_pop = 1;
-%     io_struct.custom_ext = '';
-%     model_struct.mult_nonlin = 'exp';
-% elseif model == 8
-%     model_template.lin_pop = 1;
-%     io_struct.custom_ext = ''; %'oneplus';
-%     model_struct.mult_nonlin = 'oneplus';
-% 
-% elseif model == 9
-%     model_template.add_pup = 1;
-%     io_struct.custom_ext = '';
-% elseif model == 10
-%     model_template.add_run = 1;
-%     io_struct.custom_ext = '';
-% elseif model == 11
-%     model_template.aff_pup = 1;
-%     io_struct.custom_ext = '';
-%     model_struct.mult_nonlin = 'exp';
-% elseif model == 12
-%     model_template.aff_pup = 1;
-%     io_struct.custom_ext = 'oneplus';
-%     model_struct.mult_nonlin = 'oneplus';
-% elseif model == 13
-%     model_template.aff_run = 1;
-%     io_struct.custom_ext = '';
-%     model_struct.mult_nonlin = 'exp';
-% elseif model == 14
-%     model_template.aff_run = 1;
-%     io_struct.custom_ext = 'oneplus';
-%     model_struct.mult_nonlin = 'oneplus';
-%     
-% end
-
 % build model fit struct from model_templates
 model_fit_struct = buildModelFitStruct( ...
     model_template, model_struct, io_struct);
-
+   
 %% ************************* fit models ***********************************
 
 dataset_names = getDatasetStrings(dataset_nums);
