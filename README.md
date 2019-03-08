@@ -76,7 +76,7 @@ Next we'll fit models that have previously been introduced in the literature. Th
 $ bash scripts-gam/run_previous_models.sh
 ```
 
-Note that these models can take quite a while to fit.
+With an Intel(R) Core(TM) i7-7800X CPU @ 3.50GHz (6 double-threaded cores) the run time for this script was ~2 hours using 5 screens.
 
 ## Step 7: Fit (extended) GAM models
 
@@ -86,7 +86,8 @@ Next we'll fit the GAM models (e.g. Fig. 5B in the paper). The relevant high-lev
 $ bash scripts-gam/run_gams.sh
 ```
 
-Note that these models can take quite a while to fit.
+Note that these models will take a significant amount of time to fit to all 6 sessions; with an Intel(R) Core(TM) i7-7800X CPU @ 3.50GHz (6 double-threaded cores) the fit time for all combinations of 0-4 additive and 0-4 multiplicative latent variables was ~X hours using 5 screens.
 
+## Step 8: Plotting
 
-
+Functions for creating the various panels in the paper figures are provided in the `plotting` directory; please see the README in that directory for more detailed information.

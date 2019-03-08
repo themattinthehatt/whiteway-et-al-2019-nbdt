@@ -1,28 +1,13 @@
 % user variables
 model_dir = '';
-% datasets = 21:24; %model_dir = 'pos_stim';
-% datasets = [25, 27, 29, 31, 33]; % anest
-% datasets = [26, 28, 30, 32, 34]; % awake
-% datasets = [100, 110, 120]; % 160-260
-datasets = [101, 111, 121]; % 500-1000
-% datasets = [102, 112, 122]; % 060-1260
-% datasets = [104, 114, 124]; % 060-1260, matches awake v1
-% datasets = [105, 115, 125]; % 060-1260 x 100ms bins
-% datasets = 121;
-% datasets = [210, 220, 230]; model_dir = 'pos_stim'; % 0-2000ms
-% datasets = [200, 210, 220, 230, 240]; model_dir = 'pos_stim'; % 0-2000ms
-% datasets = 190; % 190 matched to 210 
-% datasets = [201, 241]; model_dir = 'pos_stim'; % 50-350 ms
-% datasets = 191; % 201 matched to 241
-% datasets = [300, 301];
-% datasets = [400, 401, 402];
-% datasets = [410, 411, 412];
 
-num_folds = 10;
-num_xvs = 10;
+datasets = [1, 2, 3]; % v1
+% datasets = [11, 12, 13];
+
+num_folds = 5;
+num_xvs = 5;
 num_datasets = length(datasets);
 new_fig = 1;
-trial_avg = 1;
 
 % choose plot type
 plot_type.aff_increase = 0;     % stim r2 vs aff improve r2 scatter/hists
@@ -86,10 +71,11 @@ if plot_type.model_scatter
 %         'lin-pop', 'aff-pop_00-01_00-01', ...
 %         };
     model_strs = {'ind', ...
-        'add_10-02', ...
-        'goris-pop', 'add_10-04', ...
-        'lin-pop', 'aff-pop_00-01_00-01', ...
+        'add_04', ...
+        'goris-pop', 'add_04', ...
+        'lin-pop', 'aff-pop_01_01', ...
         };
+%     model_strs = {'ind', 'add_04'};
     num_models = length(model_strs);
     sub_dir = '';
     custom_ext = '';
@@ -425,10 +411,7 @@ for ds = 1:num_datasets
 
     dataset = dataset_strs{ds};
     [data_dir, results_dir] = configProjDirs(dataset);
-    if trial_avg == 1 && dataset(1) == 'K'
-        dataset = sprintf('%s_avg', dataset);
-    end
-        
+            
     for i = 1:num_models       
         filename = sprintf('fit_gam_%s%s.mat', model_strs{i}, custom_ext);   
         file_loc = fullfile( ...
@@ -1989,20 +1972,7 @@ for ds = 1:num_datasets
         ylabel('R^2')        
     end
 
-    
-    
-    % clean up plots
-%         if length(datasets) > 1
-%             title(sprintf('datasets %s - %s', datasets{1}, datasets{end}))
-%         else
-%             title(sprintf('%s', datasets{1}))
-%         end
-    
-    set(gca, 'FontSize', fontsize)
-    set(gca, 'XColor', 'k')
-    set(gca, 'YColor', 'k')
-    box off
-    legend boxoff
-%         axis square
+   
+    clean_plot
 
 end

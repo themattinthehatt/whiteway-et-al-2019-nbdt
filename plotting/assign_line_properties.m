@@ -32,55 +32,19 @@ for i = 1:length(model_strs)
             model_strs2{i} = 'ADD-POP-1';
             model_colors{i} = red;
             model_lines{i} = '-';
-        case 'add-popavg'
-            model_strs2{i} = 'ADD-POPAVG';
-            model_colors{i} = red;
-            model_lines{i} = '-';
-        case 'add-pup'
-            model_strs2{i} = 'ADD-PUP';
-            model_colors{i} = red;
-            model_lines{i} = '-';
-        case 'add-run'
-            model_strs2{i} = 'ADD-RUN';
-            model_colors{i} = red;
-            model_lines{i} = '-';
-            
+                    
         % multiplicative
         case {'mult-pop_01', 'mult-pop_01_oneplus'}
             model_strs2{i} = 'MULT-POP-1';
             model_colors{i} = blu;
             model_lines{i} = '-';
-        case {'mult-popavg', 'mult-popavg_oneplus'}
-            model_strs2{i} = 'MULT-POPAVG';
-            model_colors{i} = blu;
-            model_lines{i} = '-';
-        case {'mult-pup', 'mult-pup_oneplus'}
-            model_strs2{i} = 'MULT-PUP';
-            model_colors{i} = blu;
-            model_lines{i} = '-';
-        case {'mult-run', 'mult-run_oneplus'}
-            model_strs2{i} = 'MULT-RUN';
-            model_colors{i} = blu;
-            model_lines{i} = '-';
-            
+                    
         % affine
         case {'aff-pop_01', 'aff-pop_01_oneplus'}
             model_strs2{i} = 'AFF-POP-1';
             model_colors{i} = gre;
             model_lines{i} = '-';
-        case {'aff-popavg', 'aff-popavg_oneplus'}
-            model_strs2{i} = 'AFF-POPAVG';
-            model_colors{i} = gre;
-            model_lines{i} = '-';
-        case {'aff-pup', 'aff-pup_oneplus'}
-            model_strs2{i} = 'AFF-PUP';
-            model_colors{i} = gre;
-            model_lines{i} = '-';
-        case {'aff-run', 'aff-run_oneplus'}
-            model_strs2{i} = 'AFF-RUN';
-            model_colors{i} = gre;
-            model_lines{i} = '-';
-            
+                    
         % rlvm
         case 'add_01'
             model_strs2{i} = 'ADD-1';

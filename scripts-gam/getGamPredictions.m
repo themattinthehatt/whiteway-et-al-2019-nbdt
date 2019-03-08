@@ -1,4 +1,4 @@
-    function [pred, xmat, data, indx_reps, signs, expt_struct] = ...
+function [pred, xmat, data, indx_reps, signs, expt_struct] = ...
     getGamPredictions(data_struct, net_arch, fits, net_io, return_lvs)
 % simple function for getting xv predictions from a set of gams
 %
@@ -83,6 +83,7 @@ if return_lvs
     signs = NaN(num_xvs, num_lvs);
 else 
     pred = NaN(size(data));
+    signs = NaN;
 end
 
 for nxv = 1:num_xvs

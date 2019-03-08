@@ -21,7 +21,7 @@ sleep_time=5s
 datasets1=`seq 1 1 3`
 datasets2=`seq 11 1 13`
 
-model_nums1=(1 2 3 4)
+model_nums1=()
 model_nums2=(11 12 13 14)
 
 for dataset in $datasets1 $datasets2; do

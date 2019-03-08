@@ -1,23 +1,12 @@
 % user variables
-% datasets = 1:4;
-% datasets = 21:24;
-% datasets = [25, 27, 29, 31, 33]; % anest
-% datasets = [26, 28, 30, 32, 34]; % awake
 
-% datasets = [100, 110, 120];
-% datasets = [101, 111, 121];
-datasets = 101; %101;
-% datasets = [102, 112, 122];
-% datasets = [200, 210, 220, 230, 240];
-% datasets = [300, 301];
-% datasets = [401];
+datasets = [1]; % v1
+% datasets = [11, 12, 13]; % pfc
 
 model_dir = '';
-num_folds = 10;
-num_xvs = 10;
+num_folds = 5;
+num_xvs = 5;
 num_datasets = length(datasets);
-new_fig = 1;
-trial_avg = 1;
 
 % standard affine models
 % model_strs = {'ind', ...
@@ -77,8 +66,8 @@ trial_avg = 1;
 %     'pca_01', 'pca_02', 'pca_03', 'pca_04', 'pca_05', 'pca_06', 'pca_07', 'pca_08', ...
 %     };
 model_strs = {...
-    'add_01', 'add_02', 'add_03', 'add_04', 'add_05', 'add_06', 'add_07', 'add_08', ...
-    'pca_01', 'pca_02', 'pca_03', 'pca_04', 'pca_05', 'pca_06', 'pca_07', 'pca_08', ...
+    'add_01', 'add_02', 'add_03', 'add_04', ...
+    'add_10-01', 'add_10-02', 'add_10-03', 'add_10-04', ...
     };
 % model_strs = {...'ind', ...
 %     'add-pop_01', 'add-pop_02', 'add-pop_03', 'add-pop_04', 'add-pop_05', ...
@@ -187,9 +176,6 @@ for ds = 1:num_datasets
 
     dataset = dataset_strs{ds};
     [data_dir, results_dir] = configProjDirs(dataset);
-    if trial_avg == 1 && dataset(1) == 'K'
-        dataset = sprintf('%s_avg', dataset);
-    end
         
     for i = 1:num_models       
         filename = sprintf('fit_gam_%s%s.mat', model_strs{i}, custom_ext);   
@@ -267,8 +253,6 @@ r = [0.8500    0.3250    0.0980]; % 217 83 25
 y = [0.9290    0.6940    0.1250]; % 237 177 32
 p = [0.4940    0.1840    0.5560]; % 126 47 142
 g = [0.4660    0.6740    0.1880]; % 119 172 48
-
-if new_fig; figure; else hold on; end
 
 % tidy up model strings
 assign_line_properties;
