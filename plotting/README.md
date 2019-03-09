@@ -25,14 +25,18 @@ These plots will contain panels for each individual dataset, as well as summary 
 
 ## Figure 5
 
-**Fig. 5A**: In the script `plotting/figure_plotting.m`, first choose the PFC datasets by setting `datasets = [11, 12, 13]` on line 3. Then, to choose this particular model comparison, on line 13 set `plot_type.nonlinear_comp = 1` and set all other fields of `plot_type` to zero. Unfortunately this plotting function is quite rigid - you must plot data from all three monkeys at the same time, and must specify by hand (under the `if plot_type.nonlinear_comp` conditional on line 47) the best affine model for each monkey.
+In the script `plotting/figure_plotting.m`, first choose the PFC datasets by setting `datasets = [11, 12, 13]` on line 3.
 
-**Fig. 5B**: In the script `plotting/figure_plotting.m`, first choose the PFC datasets by setting `datasets = [11, 12, 13]` on line 3. Then, to choose this particular model comparison, on line 13 set `plot_type.extended_aff = 1` and set all other fields of `plot_type` to zero. The script is currently set up to plot up to 4 additive/multiplicative latent variables; to extend this, you must update the `model_strs` cell array defined on line 33, as well as the `add_rows` and `mul_rows` variables just below.
+**Fig. 5A**: On line 13 set `plot_type.nonlinear_comp = 1` and set all other fields of `plot_type` to zero. Unfortunately this plotting function is quite rigid - you must plot data from all three monkeys at the same time, and must specify by hand (under the `if plot_type.nonlinear_comp` conditional on line 47) the best affine model for each monkey.
 
-**Fig. 5C**: In the script `plotting/figure_plotting.m`, first choose the PFC datasets by setting `datasets = [11, 12, 13]` on line 3. Then, to choose this particular model comparison, on line 13 set `plot_type.nonlinear_comp2 = 1` and set all other fields of `plot_type` to zero. The script is currently set up to plot up to 4 additive/multiplicative latent variables; to extend this, you must update the `model_strs` cell array defined on line 33, as well as the `add_rows` and `mul_rows` variables just below.
+**Fig. 5B**: On line 13 set `plot_type.extended_aff = 1` and set all other fields of `plot_type` to zero. The script is currently set up to plot up to 4 additive/multiplicative latent variables; to extend this, you must update the `model_strs` cell array defined on line 33, as well as the `add_rows` and `mul_rows` variables just below.
+
+**Fig. 5C**: On line 13 set `plot_type.nonlinear_comp2 = 1` and set all other fields of `plot_type` to zero. The script is currently set up to plot up to 4 additive/multiplicative latent variables; to extend this, you must update the `model_strs` cell array defined on line 33, as well as the `add_rows` and `mul_rows` variables just below.
 
 ## Figure 6
 
-**Fig. 6A**: In the script `plotting/figure_plotting.m`, first choose the V1 datasets by setting `datasets = [1, 2, 3]` on line 3. Then, to choose this particular model comparison, on line 13 set `plot_type.extended_aff = 1` and set all other fields of `plot_type` to zero.  The script is currently set up to plot up to 4 additive/multiplicative latent variables; to extend this, you must update the `model_strs` cell array defined on line 33, as well as the `add_rows` and `mul_rows` variables just below.
+In the script `plotting/figure_plotting.m`, first choose the V1 datasets by setting `datasets = [1, 2, 3]` on line 3.
 
-**Fig. 6B**: In the script `plotting/figure_plotting.m`, first choose the V1 datasets by setting `datasets = [1, 2, 3]` on line 3. Then, to choose this particular model comparison, on line 13 set `plot_type.nonlinear_comp = 1` and set all other fields of `plot_type` to zero. Unfortunately this plotting function is quite rigid - you must plot data from all three monkeys at the same time, and must specify by hand (under the `if plot_type.nonlinear_comp` conditional on line 47) the best affine model for each monkey.
+**Fig. 6A**: On line 13 set `plot_type.extended_aff = 1` and set all other fields of `plot_type` to zero.  The script is currently set up to plot up to 4 additive/multiplicative latent variables; to extend this, you must update the `model_strs` cell array defined on line 33, as well as the `add_rows` and `mul_rows` variables just below.
+
+**Fig. 6B**: On line 13 set `plot_type.nonlinear_comp = 1` and set all other fields of `plot_type` to zero. Unfortunately this plotting function is quite rigid - you must plot data from all three monkeys at the same time, and must specify by hand (under the `if plot_type.nonlinear_comp` conditional on line 47) the best affine model for each monkey.

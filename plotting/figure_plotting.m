@@ -1,6 +1,6 @@
 % user variables
 
-datasets = [1, 2]; % v1
+datasets = [1, 2, 3]; % v1
 % datasets = [11, 12, 13]; % pfc
 
 model_dir = '';
@@ -11,18 +11,18 @@ num_datasets = length(datasets);
 % choose plot type
 plot_type.model_scatter = 0;    % r2 scatter plots
 plot_type.extended_aff = 0;     % QI of extended affine model
-plot_type.nonlinear_comp = 0;   % compare QIs of various nonlinear models
+plot_type.nonlinear_comp = 1;   % compare QIs of various nonlinear models
                                 % RLVM/SRLVM, affine, best extended affine
-plot_type.nonlinear_comp2 = 1;  % RLVM/SRLVM, all GAMs
+plot_type.nonlinear_comp2 = 0;  % RLVM/SRLVM, all GAMs
 
 % initialize variables
 if plot_type.model_scatter
-    plot_scatter = 0; % 0 to plot qi diff hists instead of scatter
+    plot_scatter = 1; % 0 to plot qi diff hists instead of scatter
     model_strs = { ...
         'ind', ...
         'add-pop_01', 'goris-pop', 'mult-pop_01', ...
         'lin-pop', 'aff-pop_01_01', ...
-        'add_02', 'add_04', ...
+        'add_10-02', 'add_10-04', ...
     };
     num_models = length(model_strs);
     sub_dir = '';
@@ -49,9 +49,9 @@ if plot_type.nonlinear_comp
         % V1 data
         model_strs = { ...
             'ind', ... % for QI calculation
-            'aff-pop_01_02', ... % best model for mk 1
-            'aff-pop_01_02', ... % best model for mk 2
-            'aff-pop_03_01', ... % best model for mk 3
+            'aff-pop_03_03', ... % best model for mk 1
+            'aff-pop_02_02', ... % best model for mk 2
+            'aff-pop_04_04', ... % best model for mk 3
             'aff-pop_01_01', ... % standard affine model
             'add_01', 'add_02', 'add_03', 'add_04', ... % rlvms
             'add_10-01', 'add_10-02', 'add_10-03', 'add_10-04', ... % srlvms
@@ -62,9 +62,9 @@ if plot_type.nonlinear_comp
         % PFC data
         model_strs = { ...
             'ind', ... % for QI calculation
-            'aff-pop_01_02', ... % best model for mk 1
-            'aff-pop_01_02', ... % best model for mk 2
-            'aff-pop_03_01', ... % best model for mk 3
+            'aff-pop_04_04', ... % best model for mk 1
+            'aff-pop_04_04', ... % best model for mk 2
+            'aff-pop_04_04', ... % best model for mk 3
             'aff-pop_01_01', ... % standard affine model
             'add_01', 'add_02', 'add_03', 'add_04', ... % rlvms
             'add_10-01', 'add_10-02', 'add_10-03', 'add_10-04', ... % srlvms
@@ -488,7 +488,10 @@ for ds = 1:num_datasets
         subplot(num_datasets, 1, ds)
         
         % plot gams
-        plot(num_lvs, vals_mat1, '.');
+        scatter( ...
+            num_lvs + 0.15 * (rand(size(num_lvs)) - 0.5), ...
+            vals_mat1 + 0.015 * (rand(size(vals_mat1)) - 0.5), ...
+            '.')
         hold on;
         
         % plot srlvms

@@ -22,8 +22,7 @@ else
          'units', 'normalized', ...
          'horizontalalignment', 'left', ...
          'verticalalignment', 'top')
-    xlabel(sprintf('Quality Index\n%s', x_model))
-    ylabel(sprintf('Quality Index\n%s', y_model))
+    xlabel(sprintf('QI: %s-\n%s', y_model, x_model))
     title(sprintf('\\DeltaQI = %3.2f', median(z)), ...
         'interpreter', 'tex')
 end

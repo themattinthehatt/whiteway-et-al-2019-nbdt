@@ -2,8 +2,8 @@
 
 % user variables
 num_neurons = 50;
-num_folds = 5;
-num_xvs = 5;
+num_folds = 10;
+num_xvs = 10;
 
 % model parameters
 bf_vals = [1, 2, 3, 4, 5, 6];

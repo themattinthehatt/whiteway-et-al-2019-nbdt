@@ -11,8 +11,7 @@ else
     line([0, 0], [0, ybounds(2)], 'color', 'k')
     line([median(z), median(z)], [0, ybounds(2)], ...
         'color', 'k', 'linestyle', ':')
-    xlabel(sprintf('Quality Index\n%s', x_model))
-    ylabel(sprintf('Quality Index\n%s', y_model))
+    xlabel(sprintf('QI: %s-\n%s', y_model, x_model))
     title(sprintf('\\DeltaQI = %3.2f', median(z)), ...
         'interpreter', 'tex')
 end

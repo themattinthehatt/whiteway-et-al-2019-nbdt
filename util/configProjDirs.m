@@ -2,7 +2,7 @@ function [data_dir, results_dir] = configProjDirs(dataset_name)
 % configure project directories
 %
 % INPUT:
-%   dataset_name (str): defined in getDatasetStrings
+%   dataset_name (str): defined in getDatasetStrings.m
 %
 % OUTPUT:
 %   data_dir (str): location of data associated with `dataset_name`
